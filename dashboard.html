@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🎈 열기구 방 — 대시보드</title>
+<style>
+:root{--bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a24;--bg4:#22222e;--border:#2a2a38;--border2:#383848;--text:#f0ede8;--text2:#a8a49e;--text3:#6b6760;--green:#4ade80;--green-bg:rgba(74,222,128,.1);--green-border:rgba(74,222,128,.25);--blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);--blue-border:rgba(96,165,250,.25);--amber:#fbbf24;--amber-bg:rgba(251,191,36,.1);--amber-border:rgba(251,191,36,.25);--red:#f87171;--red-bg:rgba(248,113,113,.1);--red-border:rgba(248,113,113,.25);--purple:#c084fc;--r:12px;--r2:8px;--r3:6px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;min-height:100vh}
+.header{border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;position:sticky;top:0;background:var(--bg);z-index:20}
+.logo{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700}
+.logo-icon{width:30px;height:30px;background:linear-gradient(135deg,#f97316,#ec4899);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.nav{display:flex;gap:5px}.nav a{padding:6px 12px;font-size:12px;border:1px solid var(--border2);border-radius:var(--r3);color:var(--text2);text-decoration:none;transition:.15s}.nav a:hover,.nav a.active{background:var(--bg3);color:var(--text)}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.card-title .dot{width:5px;height:5px;border-radius:50%}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+@media(max-width:600px){.grid4{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:14px;text-align:center}
+.stat-label{font-size:10px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+.stat-val{font-size:26px;font-weight:700}
+.stat-val.green{color:var(--green)}.stat-val.amber{color:var(--amber)}.stat-val.red{color:var(--red)}.stat-val.blue{color:var(--blue)}
+.hashtag-box{background:var(--bg3);border:1px dashed var(--green-border);border-radius:var(--r2);padding:14px 16px;font-size:18px;font-family:monospace;color:var(--green);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.copy-btn{padding:7px 14px;font-size:12px;border:1px solid var(--green-border);border-radius:var(--r3);background:var(--green-bg);color:var(--green);cursor:pointer;transition:.15s}.copy-btn:hover{opacity:.8}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:11px;color:var(--text3);text-align:left;padding:7px 8px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.04em}
+td{padding:8px 8px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg3)}
+.badge{display:inline-flex;align-items:center;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}.badge-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}.badge-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}.badge-blue{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}.badge-gray{background:var(--bg4);color:var(--text2);border:1px solid var(--border2)}
+.progress{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-top:8px}.progress-fill{height:100%;background:var(--green);transition:width .5s}
+.phase-alert{padding:12px 16px;border-radius:var(--r2);font-size:13px;margin-bottom:12px;border-left:3px solid}
+.phase-p{background:var(--blue-bg);color:var(--blue);border-color:var(--blue)}
+.phase-c{background:var(--green-bg);color:var(--green);border-color:var(--green)}
+.pulse{width:7px;height:7px;border-radius:50%;display:inline-block;animation:pulse 1.5s infinite;margin-right:5px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.log-item{padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;font-size:12px}.log-item:last-child{border-bottom:none}
+.log-time{color:var(--text3);min-width:55px;font-family:monospace;font-size:11px}.log-type{font-size:10px;padding:1px 5px;border-radius:3px;background:var(--bg4);color:var(--text3);min-width:36px;text-align:center}.log-msg{color:var(--text2);flex:1}
+.empty{text-align:center;padding:24px;color:var(--text3);font-size:13px}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-sm{padding:6px 12px;font-size:12px;background:transparent;border:1px solid var(--border2);border-radius:var(--r3);color:var(--text2);cursor:pointer}.btn-sm:hover{background:var(--bg3);color:var(--text)}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo"><div class="logo-icon">🎈</div>열기구 방</div>
+  <div class="nav">
+    <a href="dashboard.html" class="active">대시보드</a>
+    <a href="crew.html">크루</a>
+    <a href="admin.html">운영자</a>
+  </div>
+</div>
+<div class="wrap">
+  <div id="phase-alert" class="phase-alert phase-p"><span class="pulse" style="background:var(--blue)"></span>불러오는 중...</div>
+  <div class="grid4">
+    <div class="stat"><div class="stat-label">총 크루</div><div class="stat-val blue" id="s-total">-</div></div>
+    <div class="stat"><div class="stat-label">오늘 참여</div><div class="stat-val green" id="s-join">-</div></div>
+    <div class="stat"><div class="stat-label">미완료</div><div class="stat-val amber" id="s-undone">-</div></div>
+    <div class="stat"><div class="stat-label">봉사 대상</div><div class="stat-val red" id="s-service">-</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><div class="dot" style="background:var(--green)"></div>오늘 해시태그 <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="week-name"></span></div>
+    <div class="hashtag-box"><span id="ht-text">#불러오는 중...</span><button class="copy-btn" onclick="copyTag()">복사</button></div>
+    <div class="progress" style="margin-top:10px"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:5px"><span>완료율</span><span id="done-pct">0%</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="justify-content:space-between"><span style="display:flex;align-items:center;gap:6px"><div class="dot" style="background:var(--blue)"></div>오늘 참여 현황</span><button class="btn-sm" onclick="load()">새로고침</button></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>닉네임</th><th>아이디</th><th>유형</th><th>완료</th></tr></thead>
+      <tbody id="today-tbody"></tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><div class="dot" style="background:var(--text3)"></div>최근 활동</div>
+    <div id="log-list"></div>
+  </div>
+</div>
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzyiwQftKN_dCW1pFJEreSb4CRzXr4Yk_X5MMf2aHTEUUOH52qQO3bTzqPfh0BAbR6NDQ/exec';
+async function api(action, p={}) { return fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action,...p})}).then(r=>r.json()); }
+function typeLabel(t){return{●:'●참여',N:'N노피드',B:'B봉사',F:'F봉사(피드)'}[t]||t}
+async function load() {
+  const d = await api('getDashboard').catch(()=>null);
+  if (!d?.ok) { document.getElementById('phase-alert').textContent='데이터 로드 실패. SCRIPT_URL을 확인해주세요.'; return; }
+  document.getElementById('ht-text').textContent = d.hashtag;
+  document.getElementById('week-name').textContent = d.weekSheet;
+  document.getElementById('s-total').textContent = d.stats.totalMembers;
+  document.getElementById('s-join').textContent = d.stats.todayJoins;
+  document.getElementById('s-undone').textContent = d.stats.todayUndone;
+  document.getElementById('s-service').textContent = d.stats.serviceTarget;
+  const pct = d.stats.todayJoins > 0 ? Math.round(d.stats.todayDone / d.stats.todayJoins * 100) : 0;
+  document.getElementById('done-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  const isP = d.phase === 'participate';
+  const pa = document.getElementById('phase-alert');
+  pa.className = 'phase-alert ' + (isP ? 'phase-p' : 'phase-c');
+  pa.innerHTML = isP
+    ? '<span class="pulse" style="background:var(--blue)"></span>참여 시간 (10:00~21:59) — 해시태그 복사 후 크루 페이지에서 참여 등록해주세요.'
+    : '<span class="pulse" style="background:var(--green)"></span>완료 시간 (22:00~익일 09:59) — 해시태그 2~3회 재검색 후 좋아요 꼼꼼히!';
+  const tbody = document.getElementById('today-tbody');
+  tbody.innerHTML = d.todayParticipants.length === 0
+    ? '<tr><td colspan="4" class="empty">오늘 참여자 없음</td></tr>'
+    : d.todayParticipants.map(t=>`<tr>
+        <td style="font-weight:700">${t.nickname}</td>
+        <td style="color:var(--text3);font-size:12px">@${t.id||''}</td>
+        <td><span class="badge badge-blue">${typeLabel(t.type)}</span></td>
+        <td>${t.done?'<span class="badge badge-green">완료</span>':'<span class="badge badge-amber">대기</span>'}</td>
+      </tr>`).join('');
+  const logEl = document.getElementById('log-list');
+  logEl.innerHTML = (d.recentLogs||[]).slice(0,12).map(l=>`<div class="log-item"><span class="log-time">${l.time}</span><span class="log-type">${l.type}</span><span class="log-msg">${l.msg}</span></div>`).join('') || '<div class="empty">로그 없음</div>';
+}
+function copyTag(){const t=document.getElementById('ht-text').textContent;navigator.clipboard.writeText(t).catch(()=>{});const b=document.querySelector('.copy-btn');b.textContent='복사됨!';setTimeout(()=>b.textContent='복사',2000);}
+load();setInterval(load,60000);
+</script>
+</body>
+</html>
